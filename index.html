@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>1. uzdevums</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- CSS file -->
+	<link rel="stylesheet" type="text/css" href="stylesheet.css">
+	<!-- React libraries -->
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+	<!-- Header element -->
+	<div id="header"></div>
+	<!-- Paragraphs -->
+	<div id="p-container">
+		<div id="p1" class="p-childItem"></div>
+		<div id="p2" class="p-childItem"></div>
+		<div id="p3" class="p-childItem"></div>
+		<div id="p4" class="p-childItem"></div>
+	</div>
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- React Components -->
+	<script type="text/babel">
+		// Header component
+		class Header extends React.Component {
+			render() {
+				return (
+					<div className="header">
+						<img className="header-logo" alt="logo-file" src={this.props.src} />
+						<h1 className="header-text">This is my cool Header</h1>
+					</div>
+				);
+			}
+		}
+
+		// Paragraph component
+		class Paragraph extends React.Component {
+			constructor(props) {
+				super(props);
+				this.addRandomText = this.addRandomText.bind(this);
+				this.getRandomString = this.getRandomString.bind(this);
+				this.state = { txt: 'I love tuna' };
+			}
+
+			// create a user input which will be appended to the paragraph <p>
+			getRandomString() {
+				let myRandom = Math.floor(Math.random() * 26); // base random number (from 0 to 25)
+				const strLength = myRandom + 10; // 10 <= strLength <= 35
+				let randomString = String.fromCharCode(myRandom + 65); // append the capital letter (ASCII from 65 to 90)
+				let spaceRate = 0; // propability of writing a space ' ' (ASCII 32)
+	
+				// create all remaining letters of the random string
+				for (let i = 1; i <= strLength; i++) {
+					myRandom = Math.random(); // [0; 1) - probability rate of spaces and a new letter
+					let letter; // variable for the new letter
+					// in order to prevent a long string without spaces probability is incremented each time
+					// when a previous character is not a space
+					if (randomString.charAt(i - 1) != ' ') spaceRate += 0.05;
+					else spaceRate = 0; // RESET propability. Prevent to spaces in a row (0 < 0 - false)
+
+					// propapility is OK and a space cannot be the last character (ASCII 32)
+					if (myRandom < spaceRate && i != strLength) letter = 32;
+					else letter = Math.floor(myRandom * 26) + 97; // small letter (ASCII from 97 to 122)
+
+					// append the new letter to the string: a small letter or a space
+					randomString += String.fromCharCode(letter);
+				}
+
+				return randomString;
+			}
+
+			// scrolling
+			smoothScroll() { window.scrollBy(0, 1); } // move by 1px down
+			stopScrolling() { clearInterval(this.timer); } // stop scrolling
+			
+			// create the final string which will be rendered (previous + new)
+			addRandomText() {
+				this.setState(prevState => ({
+					// append the new random string to the current text
+					txt: prevState.txt + '. ' + this.getRandomString()
+				}), () => {
+					// when the state is updated and rendered scroll to the end of the <p>
+					const scrollBack = document.documentElement.scrollTop;
+					const target = document.querySelector('#append-' + this.props.nr + ' p');
+					target.scrollIntoView(false);
+
+					// if window the text is fully visible (previously scrolled back), scroll the window to the start position
+					// before clicking the button
+					if (document.documentElement.scrollTop <= scrollBack) window.scrollTo(0, scrollBack);
+					else {
+						// perform smooth scrolling to the end of the paragraph
+						this.timer = setInterval( () => this.smoothScroll(), 10 );
+						setTimeout(() => this.stopScrolling(), 2000);
+					}
+				});
+
+				return;
+			}
+
+			render() {
+				return (
+					<div className="paragraph">
+						<button className="p-btn" onClick={this.addRandomText}>Add Text</button>
+						<div id={"append-" + this.props.nr} className="p-text">
+							<p>{this.state.txt}. </p>
+						</div>
+					</div>
+				);
+			}
+		}
+
+		// Render components
+		ReactDOM.render(<Header src="logo.png" />, document.getElementById('header'));
+		// Create 4 paragraphs
+		for(var i = 1; i <= 4; i++)
+			ReactDOM.render(<Paragraph nr={i} />, document.getElementById('p' + i));
+
+	</script>
+</body>
+</html>

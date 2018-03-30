@@ -1,0 +1,104 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+#header {
+	background-color: #b8cced;
+	width: 95%;
+	margin: auto;
+	margin-top: 15px;
+	position: relative;
+	height: 80px;
+}
+#header .header-logo {
+	float: left;
+	height: 80px;
+	margin: 1px;
+}
+#header .header-text {
+	text-align: center;
+}
+#header:after {
+	content: "";
+	clear: both;
+}
+
+#p-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: auto;
+	width: 95%;
+}
+#p1, #p2, #p3, #p4 {
+	margin-top: 45px;
+}
+#p4 {
+	margin-bottom: 25px;
+}
+
+.paragraph {
+	position: relative;
+}
+.p-btn {
+	position: absolute;
+	top: -33px;
+	right: 0;
+	margin-bottom: 20px;
+	padding: 7px 20px;
+
+	background-color: #b8cced;
+	border: 0.5px black solid;
+	border-radius: 5px;
+	font-weight: bold;
+}
+
+.p-text {
+	border: 1px black solid;
+	border-radius: 5px;
+	padding: 5px 20px;
+	height: 200px;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+@media screen and (min-width: 751px), screen and (device-min-width: 751px) {
+	#p1, #p2, #p3, #p4 {
+		flex-basis: 47%;
+	}
+
+	#header .header-text {
+		padding-top: 20px;
+	}
+}
+@media screen and (min-width: 451px) and (max-width: 750px), screen and (device-min-width: 451px) and (device-max-width: 750px) {
+	#p1, #p2, #p3, #p4 {
+		flex-basis: 100%;
+	}
+
+	#header .header-text {
+		padding-top: 20px;
+	}
+}
+
+@media screen and (min-width: 376px) and (max-width: 450px), screen and (device-min-width: 376px) and (device-max-width: 450px) {
+	#p1, #p2, #p3, #p4 {
+		flex-basis: 100%;
+	}
+
+	#header .header-text {
+		font-size: 25px;
+		padding-top: 22.5px;
+	}
+}
+
+@media screen and (max-width: 375px), screen and (device-max-width: 375px) {
+	#p1, #p2, #p3, #p4 {
+		flex-basis: 100%;
+	}
+
+	#header .header-text {
+		padding-top: 2px;
+	}
+}
